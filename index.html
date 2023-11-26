@@ -8,7 +8,7 @@
   </head>
 
   <body>
-    <p class="text-display">#####</p>
+    <p id="text-display" class="text-display">#####</p>
     <button class="button-number" onclick="buttonHandler(this)">1</button>
     <button class="button-number" onclick="buttonHandler(this)">2</button>
     <button class="button-number" onclick="buttonHandler(this)">3</button>
@@ -62,7 +62,7 @@
         operator = value.innerHTML;
 
         if (operator == "=") {
-          evalMemory();
+          updateDisplay(evalMemory());
         }
       } else {
         // clears
@@ -76,12 +76,11 @@
 
     //TODO
     function evalMemory() {
-      console.log(eval(memory.join("")));
+      return eval(memory.join(""));
     }
 
-    //TODO
-    function updateDisplay(value) {
-      console.log(value);
+    function updateDisplay(value = 0) {
+      document.getElementById("text-display").textContent = value;
     }
 
     function clearNum() {
@@ -102,6 +101,7 @@
       }
       clearNum();
       clearOperator();
+      updateDisplay();
     }
   </script>
 </html>
