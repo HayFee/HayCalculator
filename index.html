@@ -9,35 +9,99 @@
 
   <body>
     <p class="text-display">#####</p>
-    <button class="button-number" onclick="test(1)">1</button>
-    <button class="button-number" onclick="test(2)">2</button>
-    <button class="button-number" onclick="test(3)">3</button>
-  </br>
-    <button class="button-number" onclick="test(4)">4</button>
-    <button class="button-number" onclick="test(5)">5</button>
-    <button class="button-number" onclick="test(6)">6</button>
-  </br>
-    <button class="button-number" onclick="test(7)">7</button>
-    <button class="button-number" onclick="test(8)">8</button>
-    <button class="button-number" onclick="test(9)">9</button>
-  </br>
-    <button class="button-operator" onclick="test('.')">.</button>
-    <button class="button-number" onclick="test(0)">0</button>
-    <button class="button-operator" onclick="test('=')">=</button>
-  </br>
-    <button class="button-operator" onclick="test('+')">+</button>
-    <button class="button-operator" onclick="test('-')">-</button>
-    <button class="button-operator" onclick="test('*')">*</button>
-    <button class="button-operator" onclick="test('/')">/</button>
-  </br>
-    <button class="button-clear" onclick="test('AC')">AC</button>
-    <button class="button-clear" onclick="test('C')">C</button>
+    <button class="button-number" onclick="buttonHandler(this)">1</button>
+    <button class="button-number" onclick="buttonHandler(this)">2</button>
+    <button class="button-number" onclick="buttonHandler(this)">3</button>
+    <br />
+    <button class="button-number" onclick="buttonHandler(this)">4</button>
+    <button class="button-number" onclick="buttonHandler(this)">5</button>
+    <button class="button-number" onclick="buttonHandler(this)">6</button>
+    <br />
+    <button class="button-number" onclick="buttonHandler(this)">7</button>
+    <button class="button-number" onclick="buttonHandler(this)">8</button>
+    <button class="button-number" onclick="buttonHandler(this)">9</button>
+    <br />
+    <button class="button-number" onclick="buttonHandler(this)">.</button>
+    <button class="button-number" onclick="buttonHandler(this)">0</button>
+    <button class="button-operator" onclick="buttonHandler(this)">=</button>
+    <br />
+    <button class="button-operator" onclick="buttonHandler(this)">+</button>
+    <button class="button-operator" onclick="buttonHandler(this)">-</button>
+    <button class="button-operator" onclick="buttonHandler(this)">*</button>
+    <button class="button-operator" onclick="buttonHandler(this)">/</button>
+    <br />
+    <button class="button-clear" onclick="buttonHandler(this)">AC</button>
+    <button class="button-clear" onclick="buttonHandler(this)">C</button>
   </body>
 
   <script>
-    function test(value) {
-      console.log(value)
+    const memory = [];
+    let num = "";
+    let operator = "";
+
+    function buttonHandler(value) {
+      if (
+        value.className === "button-number" ||
+        (value.innerHTML === "." && !num.includes("."))
+      ) {
+        if (operator != "") {
+          memory.push(operator);
+          clearOperator();
+        }
+
+        if (value.innerHTML === "0" && num === "0") {
+          return null;
+        }
+
+        num = num + value.innerHTML; // concatenate to number string
+      } else if (value.className === "button-operator") {
+        if (num.length != 0) {
+          memory.push(Number(num));
+          clearNum();
+        }
+        operator = value.innerHTML;
+
+        if (operator == "=") {
+          evalMemory();
+        }
+      } else {
+        // clears
+        if (value.innerHTML === "AC") {
+          clearAC();
+        } else {
+          clearC();
+        }
+      }
+    }
+
+    //TODO
+    function evalMemory() {
+      console.log(eval(memory.join("")));
+    }
+
+    //TODO
+    function updateDisplay(value) {
+      console.log(value);
+    }
+
+    function clearNum() {
+      num = "";
+    }
+
+    function clearOperator() {
+      operator = "";
+    }
+
+    function clearC() {
+      memory.pop();
+    }
+
+    function clearAC() {
+      while (memory.length > 0) {
+        memory.pop();
+      }
+      clearNum();
+      clearOperator();
     }
   </script>
-
 </html>
