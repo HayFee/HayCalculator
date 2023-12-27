@@ -35,11 +35,17 @@
   </body>
 
   <script>
-    const memory = [];
+    const memory = [0];
     let number_buffer = "";
     let operator_buffer = "";
 
     function handleNumber(num) {
+      // operator decided
+      if (operator_buffer != "") {
+        pushOpBuffer();
+        clearOpBuffer();
+      }
+
       // add decimal
       if (num === "." && number_buffer.includes(".")) {
         return null;
@@ -50,19 +56,14 @@
         return null;
       }
 
-      // new number, operator decided
-      if (operator_buffer != "") {
-        memory.push(operator_buffer);
-        clearOpBuffer();
-      }
-
       number_buffer = number_buffer + num; // concatenate typed number to buffer
+      updateDisplay(number_buffer);
     }
 
     function handleOperator(op) {
       //typed number decided
       if (number_buffer.length != 0) {
-        memory.push(Number(number_buffer));
+        pushNumBuffer();
         clearNumBuffer();
       }
 
@@ -70,6 +71,16 @@
     }
 
     function handleEquals() {
+      if (number_buffer.length != 0) {
+        pushNumBuffer();
+        clearNumBuffer();
+      }
+
+      if (operator_buffer.length != 0) {
+        pushOpBuffer();
+        clearOpBuffer();
+      }
+
       updateDisplay(evalMemory());
     }
 
@@ -80,7 +91,7 @@
 
     function clearAC() {
       // clears all memory and display
-      while (memory.length > 0) {
+      while (memory.length > 1) {
         memory.pop();
       }
       clearNumBuffer();
@@ -91,7 +102,16 @@
     //TODO
     function evalMemory() {
       // calculates result of memory
+      console.log(memory);
       return eval(memory.join(""));
+    }
+
+    function pushNumBuffer() {
+      memory.push(Number(number_buffer));
+    }
+
+    function pushOpBuffer() {
+      memory.push(operator_buffer);
     }
 
     function updateDisplay(value = 0) {
