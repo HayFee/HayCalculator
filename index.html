@@ -81,6 +81,8 @@
         clearOpBuffer();
       }
 
+      memory.push("="); // terminating character
+
       updateDisplay(evalMemory());
     }
 
@@ -99,11 +101,89 @@
       updateDisplay();
     }
 
-    //TODO
     function evalMemory() {
       // calculates result of memory
-      console.log(memory);
-      return eval(memory.join(""));
+      // console.log(memory);
+
+      let a;
+      let b;
+      let spliceLength;
+
+      // multiply and divide
+      for (let i = 1; i < memory.length - 1; i++) {
+        if (memory[i] === "*" || memory[i] === "/") {
+          // surrounding terms of operator
+          a = memory[i - 1];
+          b = memory[i + 1];
+
+          // equals marks lone term, self-applies
+          if (b === "=") {
+            b = a;
+            spliceLength = 1;
+          } else {
+            spliceLength = 2;
+          }
+
+          if (memory[i] === "*") {
+            memory[i - 1] = mult(a, b);
+          }
+
+          if (memory[i] === "/") {
+            memory[i - 1] = divide(a, b);
+          }
+
+          memory.splice(i, spliceLength);
+          i -= 1;
+        }
+      }
+
+      // add and subtract
+      for (let i = 1; i < memory.length - 1; i++) {
+        if (memory[i] === "+" || memory[i] === "-") {
+          // surrounding terms of operator
+          a = memory[i - 1];
+          b = memory[i + 1];
+
+          // equals marks lone term, self-applies
+          if (b === "=") {
+            b = a;
+            spliceLength = 1;
+          } else {
+            spliceLength = 2;
+          }
+
+          if (memory[i] === "+") {
+            memory[i - 1] = add(a, b);
+          }
+
+          if (memory[i] === "-") {
+            memory[i - 1] = sub(a, b);
+          }
+
+          memory.splice(i, spliceLength);
+          i -= 1;
+        }
+      }
+
+      memory.pop(); // remove equals
+      // console.log(memory); // Should contain 0 and result only
+      return memory[1];
+    }
+
+    function mult(a, b) {
+      return a * b;
+    }
+
+    function divide(a, b) {
+      return a / b;
+    }
+
+    function add(a, b) {
+      return a + b;
+    }
+
+    function sub(a, b) {
+      return a - b;
     }
 
     function pushNumBuffer() {
